@@ -1,0 +1,10 @@
+{
+  "item.watersprayer.lava_bottle": "Lava Bottle",
+  "item.watersprayer.sprayer": "Empty Sprayer",
+  "item.watersprayer.sprayer.honey": "Honey Sprayer",
+  "item.watersprayer.sprayer.lava_fluid": "Lava Sprayer",
+  "item.watersprayer.sprayer.water_fluid": "Water Sprayer",
+  "item.watersprayer.sprayer.tooltip": "Liquid Storage: %d / %d",
+  "block.watersprayer.workbench": "Sprayer Liquid Filling Workbench",
+  "container.watersprayer.workbench": "Liquid Filling Workbench"
+}

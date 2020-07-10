@@ -1,0 +1,23 @@
+{
+  "parent": "watersprayer:item/sprayer_base",
+  "overrides": [
+    {
+      "predicate": {
+        "honey": 1.0
+      },
+      "model": "watersprayer:item/sprayer_honey"
+    },
+    {
+      "predicate": {
+        "lava_fluid": 1.0
+      },
+      "model": "watersprayer:item/sprayer_lava_fluid"
+    },
+    {
+      "predicate": {
+        "water_fluid": 1.0
+      },
+      "model": "watersprayer:item/sprayer_water_fluid"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "watersprayer:item/sprayer_base",
+  "textures": {
+    "texture": "watersprayer:item/sprayer_water_fluid"
+  }
+}

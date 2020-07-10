@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "XYZ",
+    "  W"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:cobblestone_slab"
+    },
+    "W": {
+      "item": "minecraft:glass_bottle"
+    },
+    "X": {
+      "item": "minecraft:stone_button"
+    },
+    "Y": {
+      "item": "minecraft:iron_bars"
+    },
+    "Z": {
+      "item": "minecraft:bow"
+    }
+  },
+  "result": {
+    "item": "watersprayer:sprayer",
+    "nbt": "{Amount:0}"
+  }
+}

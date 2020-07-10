@@ -1,0 +1,10 @@
+{
+  "item.watersprayer.lava_bottle": "熔岩瓶",
+  "item.watersprayer.sprayer": "空喷雾瓶",
+  "item.watersprayer.sprayer.honey": "蜂蜜喷雾瓶",
+  "item.watersprayer.sprayer.lava_fluid": "熔岩喷雾瓶",
+  "item.watersprayer.sprayer.water_fluid": "水喷雾瓶",
+  "item.watersprayer.sprayer.tooltip": "液体存储量: %d / %d",
+  "block.watersprayer.workbench": "喷雾瓶液体灌装工作台",
+  "container.watersprayer.workbench": "液体灌装工作台"
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " Y ",
+    "#X#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:cobblestone"
+    },
+    "X": {
+      "item": "minecraft:iron_bars"
+    },
+    "Y": {
+      "item": "minecraft:hopper"
+    }
+  },
+  "result": {
+    "item": "watersprayer:workbench"
+  }
+}
