@@ -9,7 +9,7 @@
 本 Mod 基于 Minecraft 1.15.2 / 1.16.5 及对应 Forge 版本。
 
 * Minecraft 1.15.2 版本需要使用 [Scorge 3.0.6 或更高版本](https://files.minecraftforge.net/maven/net/minecraftforge/Scorge/)作为前置。
-* Minecraft 1.16.5 版本需要使用 [Scalable Cat's Force 2.13.5](https://www.curseforge.com/minecraft/mc-mods/scalable-cats-force)作为前置。
+* Minecraft 1.16.5 版本需要使用 [Scalable Cat's Force 2.13.5](https://www.curseforge.com/minecraft/mc-mods/scalable-cats-force) 作为前置。
 
 ## 合成配方
 
