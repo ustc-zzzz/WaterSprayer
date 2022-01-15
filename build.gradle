@@ -14,7 +14,7 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: 'net.minecraftforge.gradle'
 
-version = '1.0.0'
+version = '1.0.1'
 group = 'com.github.ustc-zzzz'
 archivesBaseName = project.name
 

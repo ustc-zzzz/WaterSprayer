@@ -2,7 +2,7 @@ modLoader="scorge"
 loaderVersion="[3,)"
 
 [[mods]]
-version="1.0.0"
+version="1.0.1"
 authors="ustc-zzzz"
 modId="watersprayer"
 displayName="Water Sprayer"

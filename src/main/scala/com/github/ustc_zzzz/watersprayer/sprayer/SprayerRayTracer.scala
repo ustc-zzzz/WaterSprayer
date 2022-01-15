@@ -37,7 +37,7 @@ final class SprayerRayTracer(entity: LivingEntity) {
       if (entityResult != null) {
         hit = Some(entityResult)
         continueRayTracing = false
-        newPos = blockResult.getHitVec
+        newPos = entityResult.getHitVec
       }
       stack.push(Traced(newMotion, newPos))
       if (newPos.y < 0) continueRayTracing = false
