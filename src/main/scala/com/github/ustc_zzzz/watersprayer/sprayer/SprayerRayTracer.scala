@@ -37,7 +37,10 @@ final class SprayerRayTracer(entity: LivingEntity) {
       if (entityResult != null) {
         hit = Some(entityResult)
         continueRayTracing = false
-        newPos = entityResult.getEntity.getBoundingBox.grow(0.3F).rayTrace(pos, newPos).orElse(newPos)
+        val bbox = entityResult.getEntity.getBoundingBox.grow(0.3F)
+        val bboxMaxSize = Math.max(bbox.getXSize, Math.max(bbox.getYSize, bbox.getZSize))
+        val end = pos.add(newPos.subtract(pos).pipe(v => v.normalize().scale(bboxMaxSize + v.length())))
+        newPos = bbox.rayTrace(end, pos).orElse(newPos).add(bbox.rayTrace(pos, end).orElse(newPos)).scale(0.5)
       }
       stack.push(Traced(newMotion, newPos))
       if (newPos.y < 0) continueRayTracing = false
