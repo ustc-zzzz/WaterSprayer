@@ -14,7 +14,6 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.TickEvent
 import net.minecraftforge.fml.network.simple.SimpleChannel
 import net.minecraftforge.fml.network.{NetworkEvent, NetworkRegistry, PacketDistributor}
-import org.apache.logging.log4j.LogManager
 
 import scala.util.chaining._
 
@@ -29,6 +28,7 @@ object SprayerWaterHUDManager {
     c.registerMessage[Msg.type](0, Msg.runtimeClass, Msg.encode, Msg.decode, Msg.callback).asInstanceOf[AnyRef]
   }
 
+  // noinspection ScalaUnusedSymbol
   object Msg {
     def decode(packet: PacketBuffer): Msg.type = Msg
 
@@ -47,7 +47,7 @@ object SprayerWaterHUDManager {
   def registerClientEvents(): Unit = {
     MinecraftForge.EVENT_BUS.addListener((e: TickEvent.ClientTickEvent) => if (e.phase == TickEvent.Phase.END) {
       var local = tickLeft.get()
-      if (local > 0) LogManager.getLogger(classOf[WaterSprayerMod]).info("Local tick left: " + local)
+      if (local > 0) WaterSprayerMod.logger.info("Local tick left: " + local)
       while (!tickLeft.compareAndSet(local, 0.max(local - 1))) local = tickLeft.get()
     })
 
@@ -59,18 +59,18 @@ object SprayerWaterHUDManager {
         try {
           val mc = Minecraft.getInstance
           val c = mc.player.getBrightness
-          val u = -mc.player.rotationYaw / 64.0F
-          val v = mc.player.rotationPitch / 64.0F
+          val u = -mc.player.yRot / 64.0F
+          val v = mc.player.xRot / 64.0F
           val a = (t - e.getPartialTicks).min(24.0F) / 64.0F
-          val m = e.getMatrixStack.getLast.getMatrix.tap(_.setIdentity)
-          WorldVertexBufferUploader draw Tessellator.getInstance.getBuffer.tap { builder =>
-            mc.getTextureManager.bindTexture(texture)
+          val m = e.getMatrixStack.last.pose.tap(_.setIdentity)
+          WorldVertexBufferUploader end Tessellator.getInstance.getBuilder.tap { builder =>
+            mc.getTextureManager.bind(texture)
             builder.begin(7, DefaultVertexFormats.POSITION_COLOR_TEX)
-            builder.pos(m, -1.0F, -1.0F, -0.5F).color(c, c, c, a).tex(4.0F + u, 4.0F + v).endVertex()
-            builder.pos(m, 1.0F, -1.0F, -0.5F).color(c, c, c, a).tex(0.0F + u, 4.0F + v).endVertex()
-            builder.pos(m, 1.0F, 1.0F, -0.5F).color(c, c, c, a).tex(0.0F + u, 0.0F + v).endVertex()
-            builder.pos(m, -1.0F, 1.0F, -0.5F).color(c, c, c, a).tex(4.0F + u, 0.0F + v).endVertex()
-            builder.finishDrawing()
+            builder.vertex(m, -1.0F, -1.0F, -0.5F).color(c, c, c, a).uv(4.0F + u, 4.0F + v).endVertex()
+            builder.vertex(m, 1.0F, -1.0F, -0.5F).color(c, c, c, a).uv(0.0F + u, 4.0F + v).endVertex()
+            builder.vertex(m, 1.0F, 1.0F, -0.5F).color(c, c, c, a).uv(0.0F + u, 0.0F + v).endVertex()
+            builder.vertex(m, -1.0F, 1.0F, -0.5F).color(c, c, c, a).uv(4.0F + u, 0.0F + v).endVertex()
+            builder.end()
           }
         } finally {
           RenderSystem.disableBlend()

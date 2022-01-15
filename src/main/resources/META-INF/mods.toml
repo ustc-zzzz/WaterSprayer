@@ -1,24 +1,24 @@
-modLoader="scorge"
-loaderVersion="[3,)"
+modLoader="kotori_scala"
+loaderVersion="[2.13.3,2.14.0)"
+license="WTFPL" # Do what the f*ck you want to do
 
 [[mods]]
-version="1.0.1"
+version="1.1.0"
 authors="ustc-zzzz"
 modId="watersprayer"
 displayName="Water Sprayer"
 description="Water Sprayer Mod"
-entryClass="com.github.ustc_zzzz.watersprayer.WaterSprayerMod"
 
 [[dependencies.watersprayer]]
 modId="forge"
 mandatory=true
-versionRange="[31,)"
+versionRange="[36,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.watersprayer]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.15.2]"
+versionRange="[1.16.5]"
 ordering="NONE"
 side="BOTH"

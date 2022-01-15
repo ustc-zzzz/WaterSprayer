@@ -7,8 +7,8 @@ import net.minecraft.world.World
 
 import scala.util.chaining._
 
-object LavaBottleItem extends Item(new Item.Properties().group(ItemGroup.MISC).maxStackSize(4)) {
-  override def onItemRightClick(world: World, player: PlayerEntity, hand: Hand): ActionResult[ItemStack] = {
-    ActionResult.resultConsume(player.tap(_.setActiveHand(hand)).getHeldItem(hand))
+object LavaBottleItem extends Item(new Item.Properties().tab(ItemGroup.TAB_MISC).stacksTo(4)) {
+  override def use(world: World, player: PlayerEntity, hand: Hand): ActionResult[ItemStack] = {
+    ActionResult.consume(player.tap(_.startUsingItem(hand)).getItemInHand(hand))
   }
 }

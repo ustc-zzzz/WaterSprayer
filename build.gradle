@@ -1,48 +1,75 @@
 buildscript {
     repositories {
-        maven {
-            url = 'https://files.minecraftforge.net/maven'
-        }
-        jcenter()
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
+        classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
     }
 }
 
-apply plugin: 'scala'
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '1.0.1'
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+version = '1.1.0'
 group = 'com.github.ustc-zzzz'
 archivesBaseName = project.name
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200514-1.15.1'
+    // mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'parchment', version: '2021.10.17-1.16.5'
     runs {
         client {
             properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
             properties 'forge.logging.console.level': 'debug'
             workingDirectory project.file('run')
-            source sourceSets.main
+            mods {
+                watersprayer {
+                    source sourceSets.main
+                }
+            }
         }
         server {
             properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP,CLASSLOADING'
             properties 'forge.logging.console.level': 'debug,trace'
             workingDirectory project.file('run')
-            source sourceSets.main
+            mods {
+                watersprayer {
+                    source sourceSets.main
+                }
+            }
         }
     }
 }
 
+repositories {
+    maven {
+        name = 'Azure-SLP'
+        url = 'https://pkgs.dev.azure.com/Kotori316/minecraft/_packaging/mods/maven/v1'
+        content {
+            includeModule 'org.typelevel', 'cats-core_2.13'
+            includeModule 'org.typelevel', 'cats-kernel_2.13'
+            includeModule 'com.kotori316', 'scalablecatsforce'
+            excludeVersionByRegex '.*', '.*', '.*_mapped_snapshot_.*'
+        }
+    }
+    mavenCentral()
+}
+
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.2.0'
-    compile 'org.scala-lang:scala-library:2.13.1'
-    compile 'net.minecraftforge:Scorge:3.0.6'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.20'
+
+    implementation 'org.typelevel:cats-core_2.13:2.7.0'
+    implementation 'org.scala-lang:scala-library:2.13.6'
+    implementation 'com.kotori316:scalablecatsforce:2.13.5-build-2:dev'
 }
 
 jar {
@@ -56,4 +83,3 @@ jar {
         'Implementation-Timestamp': new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
     ])
 }
-

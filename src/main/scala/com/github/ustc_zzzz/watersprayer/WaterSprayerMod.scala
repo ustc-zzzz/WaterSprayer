@@ -1,39 +1,45 @@
 package com.github.ustc_zzzz.watersprayer
 
-import com.github.ustc_zzzz.watersprayer.sprayer.SprayerWaterHUDManager
 import net.minecraft.block.{Block, Blocks}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScreenManager
 import net.minecraft.inventory.container.ContainerType
-import net.minecraft.item.{BlockItem, Item, ItemGroup}
+import net.minecraft.item.{BlockItem, Item, ItemGroup, ItemModelsProperties}
 import net.minecraft.particles.ParticleType
+import net.minecraft.util.ResourceLocation
 import net.minecraftforge.api.distmarker.{Dist, OnlyIn}
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.{FMLClientSetupEvent, FMLCommonSetupEvent}
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.fml.{DistExecutor, ModLoadingContext}
-import net.minecraftforge.scorge.lang.ScorgeModLoadingContext
-import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.{LogManager, Logger}
 
-final class WaterSprayerMod {
-  ScorgeModLoadingContext.get.getModEventBus.register {
-    DistExecutor.runForDist[AnyRef](() => () => new AnyRef with CommonListener with ClientListener, () => () => new AnyRef with CommonListener)
-  }
+@Mod(WaterSprayerMod.id)
+object WaterSprayerMod {
+  final val id = "watersprayer"
+  final val logger: Logger = LogManager.getLogger("WaterSprayer")
 
+  FMLJavaModLoadingContext.get.getModEventBus.register(DistExecutor.safeRunForDist[AnyRef](
+    () => () => new AnyRef with CommonListener with ClientListener, () => () => new AnyRef with CommonListener))
+
+  // noinspection ScalaUnusedSymbol
   trait CommonListener {
     @SubscribeEvent
     def onCommonSetup(e: FMLCommonSetupEvent): Unit = {
-      SprayerWaterHUDManager.registerCommonEvents()
+      sprayer.SprayerWaterHUDManager.registerCommonEvents()
       val info = ModLoadingContext.get.getActiveContainer.getModInfo
-      LogManager.getLogger(classOf[WaterSprayerMod]).info(s"Hello ${info.getDescription} (version ${info.getVersion})!")
+      logger.info(s"Hello ${info.getDescription} (version ${info.getVersion})!")
     }
 
     @SubscribeEvent
     def onRegisterItem(e: RegistryEvent.Register[Item]): Unit = {
       e.getRegistry.register(sprayer.SprayerItem.setRegistryName("sprayer"))
       e.getRegistry.register(bottle.LavaBottleItem.setRegistryName("lava_bottle"))
-      e.getRegistry.register(new BlockItem(workbench.WorkbenchBlock, new Item.Properties().group(ItemGroup.MISC)).setRegistryName("workbench"))
+      e.getRegistry.register(new BlockItem(workbench.WorkbenchBlock,
+        new Item.Properties().tab(ItemGroup.TAB_MISC)).setRegistryName("workbench"))
     }
 
     @SubscribeEvent
@@ -55,20 +61,29 @@ final class WaterSprayerMod {
   }
 
   @OnlyIn(Dist.CLIENT)
+  // noinspection ScalaUnusedSymbol
   trait ClientListener {
     @SubscribeEvent
     def onClientSetup(e: FMLClientSetupEvent): Unit = {
-      SprayerWaterHUDManager.registerClientEvents()
+      sprayer.SprayerWaterHUDManager.registerClientEvents()
       import workbench.{WorkbenchContainer => Container, WorkbenchContainerGui => Gui}
-      ScreenManager.registerFactory[Container, Gui](workbench.WorkbenchContainerType, new Gui(_, _, _))
+      ScreenManager.register[Container, Gui](workbench.WorkbenchContainerType, new Gui(_, _, _))
+      e.enqueueWork[Unit](() => {
+        val item = sprayer.SprayerItem
+        import sprayer.SprayerParticles._
+        ItemModelsProperties.register(item, new ResourceLocation("honey"), new Getter(HoneyType))
+        ItemModelsProperties.register(item, new ResourceLocation("lava_fluid"), new Getter(LavaFluidType))
+        ItemModelsProperties.register(item, new ResourceLocation("water_fluid"), new Getter(WaterFluidType))
+      })
     }
 
     @SubscribeEvent
     def onRegisterParticleFactory(e: ParticleFactoryRegisterEvent): Unit = {
       import sprayer.SprayerParticles._
-      Minecraft.getInstance.particles.registerFactory(HoneyType, new Factory(Blocks.HONEY_BLOCK.getDefaultState))
-      Minecraft.getInstance.particles.registerFactory(LavaFluidType, new Factory(Blocks.MAGMA_BLOCK.getDefaultState))
-      Minecraft.getInstance.particles.registerFactory(WaterFluidType, new Factory(Blocks.PRISMARINE_BRICKS.getDefaultState))
+      val engine = Minecraft.getInstance.particleEngine
+      engine.register(HoneyType, new Factory(Blocks.HONEY_BLOCK.defaultBlockState))
+      engine.register(LavaFluidType, new Factory(Blocks.MAGMA_BLOCK.defaultBlockState))
+      engine.register(WaterFluidType, new Factory(Blocks.PRISMARINE_BRICKS.defaultBlockState))
     }
   }
 }
